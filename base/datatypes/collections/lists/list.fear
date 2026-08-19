@@ -52,7 +52,7 @@ List[E:*]: _List[E],_AssertEmpty,_AssertSize {
   .str by->`[]`;
   .info by->Block#
     .if {this.isEmpty} .return {Info}
-    .let list= {this.flow.map{e->by#e.info}.list}
+    .let list= {this.flow.fold({List[Info]},{acc,e->acc +> (by#e.info)})}
     //.return{list.info{::}};This would go in stack overflow
     .return{Info{'i
       .match->::.list list;

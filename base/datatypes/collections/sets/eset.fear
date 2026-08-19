@@ -56,10 +56,10 @@ ESet[E]: Pipe[ESet[E]] {
   //>   .check{eset.take(-1)! .assertEq +1}
   //>   .check{eset.take(-1).isEmpty .assertTrue}
   //>   .check{eset.size .assertEq 1}
-  mut .take(elem: E): Opt[E] -> Block#
-    .let e={this.opt(elem)}
-    .do {e.ifSome{Block#(this.remove ::, Void)}}
-    .return {e};
+  mut .take(elem: E): Opt[E] -> this.opt(elem).match{
+    .empty -> {};
+    .some x -> Block#(this.remove x, Opts#x);
+    };
 
   /// `this.getTake(e)` removes and returns `e`, throws if it doesn't exist.
   //>   .let eset={Flows(+1, -2).eset({::}, {::.imm.abs})}
