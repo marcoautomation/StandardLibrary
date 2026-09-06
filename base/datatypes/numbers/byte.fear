@@ -38,10 +38,10 @@ Byte: Sealed,DataType[Byte,Byte],SumNumber[Byte] {
 
   /// ``this.getTruncDiv(d)`` returns `this` divided by ``d``, truncated toward ``0``. Throws iff ``d == 0``.
   //>   .check{(7.getByte) .getTruncDiv 2 .assertEq(3.getByte)}
-  //>   .checkDetErr({_ -> True}, {7.getByte .getDiv 0})
+  //>   .checkDetErr({_ -> True}, {7.getByte .getTruncDiv 0})
   .getTruncDiv(d: Nat): Byte;
 
-  /// ``this.getDiv(d)`` returns `this` exactly divided by `d`. Throws iff ``d == 0`` or ``this.rem == 1``.
+  /// ``this.getDiv(d)`` returns `this` exactly divided by `d`. Throws iff ``d == 0`` or ``rem != 0``.
   //>   .check{(6.getByte) .getDiv 2 .assertEq(3.getByte)}
   //>   .checkDetErr({_ -> True}, {7.getByte .getDiv 3})
   //>   .checkDetErr({_ -> True}, {7.getByte .getDiv 0})
@@ -184,7 +184,7 @@ Byte: Sealed,DataType[Byte,Byte],SumNumber[Byte] {
 
   /// ``this=~~=endInclusive`` returns the inclusive range ``[this, endInclusive]``.
   /// Throws if the range would be empty (``this > endInclusive``).
-  //>   .check{1.getByte=~~=(4.getByte) .assertEq({::}, Lists#(1.getByte, 2.getByte, 3.getByte, 4.getByte))}
+  //>   .check{1.getByte=~~=(4.getByte) .list .assertEq({::}, Lists#(1.getByte, 2.getByte, 3.getByte, 4.getByte))}
   //>   .checkDetErr({_ -> True}, {(4.getByte)=~~=(1.getByte)})
   =~~=(endInclusive: Byte): Range[Byte] -> Block#
     .if {this > endInclusive } .error {

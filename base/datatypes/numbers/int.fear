@@ -41,11 +41,11 @@ Int: Sealed,DataType[Int,Int],SumNumber[Int] {
   /// ``this.getTruncDiv(d)`` returns `this` divided by ``d``, truncated toward ``0``. Throws iff ``d == 0``.
   /// Note: negative divisors are not allowed, if you need this use `this.aluDiv`.
   //>   .check{+7 .getTruncDiv 2 .assertEq +3}
-  //>   .check{-7 .getTruncDiv 2 .assertEq +3}
+  //>   .check{-7 .getTruncDiv 2 .assertEq -3}
   //>   .checkDetErr({_ -> True}, {+7 .getTruncDiv 0})
   .getTruncDiv(d: Nat): Int;
 
-  /// ``this.getDiv(d)`` returns `this` exactly divided by `d`. Throws iff ``d == 0`` or ``this.rem == 1``.
+  /// ``this.getDiv(d)`` returns `this` exactly divided by `d`. Throws iff ``d == 0`` or ``rem != 0``.
   //>   .check{(+6) .getDiv 2 .assertEq(+3)}
   //>   .checkDetErr({_ -> True}, {+7 .getDiv 3})
   //>   .checkDetErr({_ -> True}, {+7 .getDiv 0})
@@ -113,7 +113,7 @@ Int: Sealed,DataType[Int,Int],SumNumber[Int] {
   /// ``this.wrapIndex(len)`` returns `.some` of ``this.getWrapIndex(len)`` if ``len != 0``, `.empty` iff ``len == 0``.
   //>   .check{-1 .wrapIndex 7 .assertEq({::}, Opts# 6)}
   //>   .check{+5 .wrapIndex 0 .assertEmpty {::}}
-  .wrapIndex(len: Nat): Opt[Nat] -> len == 0 .toOpt {this.getWrapIndex(len)};
+  .wrapIndex(len: Nat): Opt[Nat] -> len != 0 .toOpt {this.getWrapIndex(len)};
 
   /// `this.num` converts `this` to a `Num`.
   /// Note: `Num` can exactly represent every `Int` value, so there is no ``soft``/``get`` variant needed for this conversion.
@@ -190,12 +190,12 @@ Int: Sealed,DataType[Int,Int],SumNumber[Int] {
   .aluRem(x: Int): Int;
 
   /// ``this.aluShiftLeft(bits)`` returns `this` shifted left by ``bits``, with the effective shift
-  /// taken modulo ``64`` (``bits & 33``)
+  /// taken modulo ``64`` (``bits & 63``)
   //>   .check{+1 .aluShiftLeft 3 .assertEq +8}
   .aluShiftLeft(bits: Nat): Int;
 
   /// ``this.aluShiftRight(bits)`` returns `this` arithmetically shifted right (sign-extending) by
-  /// ``bits``, with the effective shift taken modulo ``64`` (``bits & 64``)
+  /// ``bits``, with the effective shift taken modulo ``64`` (``bits & 63``)
   //>   .check{-8 .aluShiftRight 1 .assertEq -4}
   .aluShiftRight(bits: Nat): Int;
 

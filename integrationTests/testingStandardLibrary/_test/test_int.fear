@@ -28,6 +28,8 @@ IntWrapIndexTests: Test {::
   .check{+0.getWrapIndex 7 .assertEq 0}
   .check{+7.getWrapIndex 7 .assertEq 0}
   .check{+8.getWrapIndex 7 .assertEq 1}
+  .check{(-1).wrapIndex 7 .assertEq ({::},Opts#(6))}
+  .check{+8.wrapIndex 0 .assertEq ({::},Opt[Nat])}
   }
 
 IntConvTests: Test {::
