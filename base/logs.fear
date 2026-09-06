@@ -73,6 +73,33 @@ InMemoryLog[T]:CaptureFree{
   ///Convenience over calling ``sys.readLog(this)``
   .reader(sys: mut System): mut LogReader[T]->sys.readLog(this);
   }
+///Logs strings to your own text file, instead of the single shared file
+///base.Log writes to.
+///
+///Use by defining a capture-free singleton log:
+///```
+///PkgLog: FileLog{"myFeature"}
+///...//usage
+///PkgLog.log("something happened")
+///```
+///
+///Unlike InMemoryLog's name, which is only diagnostic, this name also picks
+///the file: the log is written to .out/logs/<name>/<name>.log. Two
+///different FileLog declarations that share a name write to the same file
+///and interleave -- names must be unique across all FileLog declarations
+///in a project, not just readable.
+///
+///Otherwise this behaves exactly like base.Log: each call appends the
+///string representation of s as one timestamped line, and the file is
+///managed by the same circular-log mechanism (moved to a stamped archive on
+///startup/shutdown, empty logs deleted, a bounded number of archives kept).
+///
+///See also: base.Log (the single fixed shared log, no declaration needed),
+///base.InMemoryLog (in memory instead of a file, for unit testing).
+FileLog:CaptureFree{
+  .name: Str;
+  .log(s: read ToStr): Void -> Magic!;
+  }
 LogReader[T]: ToIso[LogReader[T]], WidenTo[LogReader[T]]{
   mut .read: List[T];    ///Returns the values currently stored in the log without removing them
   mut .consume: List[T]; ///Returns the values currently stored in the log and clears the log
