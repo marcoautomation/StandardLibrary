@@ -83,16 +83,19 @@ InMemoryLog[T]:CaptureFree{
 ///PkgLog.log("something happened")
 ///```
 ///
-///Unlike InMemoryLog's name, which is only diagnostic, this name also picks
-///the file: the log is written to .out/logs/<name>/<name>.log. Two
-///different FileLog declarations that share a name write to the same file
-///and interleave -- names must be unique across all FileLog declarations
-///in a project, not just readable.
+///The name is only diagnostic, exactly like InMemoryLog's -- it never picks
+///the file. The file is named after this log's own declared type instead,
+///at .out/logs/<TypeName>/<TypeName>.log. Since no two types share a name
+///within one package, two different FileLog declarations can never write
+///to the same file, regardless of what name they're given.
 ///
 ///Otherwise this behaves exactly like base.Log: each call appends the
 ///string representation of s as one timestamped line, and the file is
 ///managed by the same circular-log mechanism (moved to a stamped archive on
 ///startup/shutdown, empty logs deleted, a bounded number of archives kept).
+///
+///Concrete log types must be non generic.
+///Writing throws a nondeterministic error if the concrete log type is generic.
 ///
 ///See also: base.Log (the single fixed shared log, no declaration needed),
 ///base.InMemoryLog (in memory instead of a file, for unit testing).
