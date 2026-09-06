@@ -8,8 +8,9 @@ public interface FileLog$5g$0 extends CaptureFree$2dk$0{
   }
   AppLog _log();
   default Object imm$log$1(Object p0){
-    if (isGeneric(this)){ throw nonDetErr("Generic logs can not be written"); }
-    _log().append(toS(p0));
+    var log= _log();
+    if (log == null){ throw nonDetErr("Generic logs can not be written"); }
+    log.append(toS(p0));
     return Void$o$0.instance;
   }
 }
